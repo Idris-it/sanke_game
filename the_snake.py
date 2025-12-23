@@ -151,7 +151,7 @@ def handle_keys(snake: Snake):
 def main():
     """Основной игровой цикл."""
     global screen, clock
-    
+
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('Изгиб Питона')
