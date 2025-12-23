@@ -1,6 +1,7 @@
-import pygame
 import random
 from typing import List, Tuple
+
+import pygame
 
 # --- Константы ---
 SCREEN_WIDTH = 640
@@ -48,7 +49,7 @@ class Apple(GameObject):
         """Задаёт случайную позицию яблока."""
         self.position = (
             random.randint(0, GRID_WIDTH - 1) * GRID_SIZE,
-            random.randint(0, GRID_HEIGHT - 1) * GRID_SIZE
+            random.randint(0, GRID_HEIGHT - 1) * GRID_SIZE,
         )
 
     def draw(self, screen: pygame.Surface):
@@ -76,7 +77,7 @@ class Snake(GameObject):
 
     def update_direction(self):
         """Обновляет направление движения."""
-        if self.next_direction:
+        if self.next_direction is not None:
             self.direction = self.next_direction
             self.next_direction = None
 
@@ -87,7 +88,7 @@ class Snake(GameObject):
 
         new_head = (
             (head_x + dx * GRID_SIZE) % SCREEN_WIDTH,
-            (head_y + dy * GRID_SIZE) % SCREEN_HEIGHT
+            (head_y + dy * GRID_SIZE) % SCREEN_HEIGHT,
         )
 
         if new_head in self.positions[2:]:
@@ -115,7 +116,7 @@ class Snake(GameObject):
             rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, self.body_color, rect)
 
-        if self.last:
+        if self.last is not None:
             rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, rect)
 
@@ -142,7 +143,7 @@ def main():
     """Основной игровой цикл."""
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Изгиб Питона")
+    pygame.display.set_caption('Изгиб Питона')
     clock = pygame.time.Clock()
 
     snake = Snake()
@@ -165,5 +166,5 @@ def main():
         pygame.display.update()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
