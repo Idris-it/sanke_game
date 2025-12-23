@@ -24,6 +24,10 @@ RIGHT = (1, 0)
 
 DIRECTIONS = [UP, DOWN, LEFT, RIGHT]
 
+# --- Глобальные переменные для тестов ---
+screen = None
+clock = None
+
 
 class GameObject:
     """Базовый класс игровых объектов."""
@@ -146,6 +150,8 @@ def handle_keys(snake: Snake):
 
 def main():
     """Основной игровой цикл."""
+    global screen, clock
+    
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption('Изгиб Питона')
