@@ -1,3 +1,5 @@
+"""Игра 'Змейка'."""
+
 import random
 from typing import List, Tuple
 
@@ -22,16 +24,12 @@ RIGHT = (1, 0)
 
 DIRECTIONS = [UP, DOWN, LEFT, RIGHT]
 
-# --- Глобальные переменные для тестов ---
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-clock = pygame.time.Clock()
-
 
 class GameObject:
     """Базовый класс игровых объектов."""
 
     def __init__(self, position: Tuple[int, int] = (0, 0)):
+        """Инициализирует игровой объект."""
         self.position = position
         self.body_color = None
 
@@ -63,7 +61,10 @@ class Apple(GameObject):
 
 
 class Snake(GameObject):
+    """Класс змейки."""
+
     def __init__(self):
+        """Инициализирует змейку."""
         center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         super().__init__(center)  # передаем позицию в GameObject
         self.positions: List[Tuple[int, int]] = [center]
@@ -74,7 +75,18 @@ class Snake(GameObject):
         self.length = 1
         self.last = None
 
+    def get_head_position(self):
+        """Возвращает позицию головы змейки."""
+        return self.positions[0]
+
+    def update_direction(self):
+        """Обновляет направление движения змейки."""
+        if self.next_direction:
+            self.direction = self.next_direction
+            self.next_direction = None
+
     def move(self):
+        """Перемещает змейку по игровому полю."""
         head_x, head_y = self.get_head_position()
         dx, dy = self.direction
 
@@ -94,7 +106,6 @@ class Snake(GameObject):
             self.last = self.positions.pop()
         else:
             self.last = None
-
 
     def reset(self):
         """Сбрасывает змейку в начальное состояние."""
@@ -143,8 +154,6 @@ def main():
     snake = Snake()
     apple = Apple()
 
-    screen.fill(BOARD_BACKGROUND_COLOR)
-
     while True:
         clock.tick(20)
         handle_keys(snake)
@@ -155,6 +164,7 @@ def main():
             snake.length += 1
             apple.randomize_position()
 
+        screen.fill(BOARD_BACKGROUND_COLOR)
         snake.draw(screen)
         apple.draw(screen)
         pygame.display.update()
