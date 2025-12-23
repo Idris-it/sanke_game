@@ -22,12 +22,16 @@ RIGHT = (1, 0)
 
 DIRECTIONS = [UP, DOWN, LEFT, RIGHT]
 
+# --- Глобальные переменные для тестов ---
+pygame.init()
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+clock = pygame.time.Clock()
+
 
 class GameObject:
     """Базовый класс игровых объектов."""
 
-    def __init__(self, position: Tuple[int, int]):
-        """Инициализирует объект."""
+    def __init__(self, position: Tuple[int, int] = (0, 0)):
         self.position = position
         self.body_color = None
 
@@ -59,36 +63,24 @@ class Apple(GameObject):
 
 
 class Snake(GameObject):
-    """Класс змейки."""
-
     def __init__(self):
-        """Инициализирует змейку."""
         center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-        self.length = 1
+        super().__init__(center)  # передаем позицию в GameObject
         self.positions: List[Tuple[int, int]] = [center]
+        self.position = center  # нужен для тестов
         self.direction = RIGHT
         self.next_direction = None
         self.body_color = SNAKE_COLOR
+        self.length = 1
         self.last = None
 
-    def get_head_position(self) -> Tuple[int, int]:
-        """Возвращает позицию головы змейки."""
-        return self.positions[0]
-
-    def update_direction(self):
-        """Обновляет направление движения."""
-        if self.next_direction is not None:
-            self.direction = self.next_direction
-            self.next_direction = None
-
     def move(self):
-        """Перемещает змейку."""
         head_x, head_y = self.get_head_position()
         dx, dy = self.direction
 
         new_head = (
             (head_x + dx * GRID_SIZE) % SCREEN_WIDTH,
-            (head_y + dy * GRID_SIZE) % SCREEN_HEIGHT,
+            (head_y + dy * GRID_SIZE) % SCREEN_HEIGHT
         )
 
         if new_head in self.positions[2:]:
@@ -96,11 +88,13 @@ class Snake(GameObject):
             return
 
         self.positions.insert(0, new_head)
+        self.position = new_head  # обновляем атрибут position
 
         if len(self.positions) > self.length:
             self.last = self.positions.pop()
         else:
             self.last = None
+
 
     def reset(self):
         """Сбрасывает змейку в начальное состояние."""
